@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Role-Based Booking Application
 
-## Getting Started
+A full-stack booking platform built with **React**, **TailwindCSS**, and **Supabase**.  
+This app provides role-based access for **Users** (who can browse and book services) and **Providers** (who can manage services, availability, and bookings).
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🚀 Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 🔑 Authentication & Roles
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Secure login with **Supabase Auth** (email/password, OAuth, or magic link).
+- Role-based access:
+  - **Users** → Browse & book services.
+  - **Providers** → Manage services, availability, and bookings.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 👤 User Features
 
-## Learn More
+- **Service Browsing & Discovery**
+  - Search and infinite scroll for service listings.
+  - View details (name, description, duration, price).
+- **Date & Time Picker**
+  - Calendar-based booking with real-time availability.
+  - Prevents double booking.
+- **Booking Management**
+  - Confirm bookings with a summary screen.
+  - View or cancel existing bookings.
 
-To learn more about Next.js, take a look at the following resources:
+### 🛠 Provider Features
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Service Management**
+  - Add, update, or delete services.
+- **Availability Management**
+  - Define available slots, adjust or block times.
+- **Booking Oversight**
+  - Dashboard with upcoming/past bookings.
+  - Handle cancellations or reschedules.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🏗 Tech Stack
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Frontend
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **React** (with React Router)
+- **TailwindCSS** (responsive UI)
+- Key components:
+  - Service List (infinite scroll)
+  - Service Details Page
+  - Calendar/Date Picker
+  - Booking Summary Modal
+  - User Dashboard
+  - Provider Dashboard
+
+### Backend
+
+- **Supabase** (Postgres + Realtime + Auth)
+- Database schema:
+  - `users` → roles: `user` or `provider`
+  - `services` → service details per provider
+  - `availability` → service availability slots
+  - `bookings` → user bookings with status tracking
+
+---
+
+## 📦 Getting Started
+
+### Prerequisites
+
+- Node.js (>= 16)
+- Supabase project & keys
+
+### Installation
+
+   ```bash
+1. Clone the repo:
+
+   git clone  https://github.com/CasManny/bookeasy.git
+
+   cd bookeasy
+
+2. Install dependencies:
+   npm install
+
+3. Set up environment variables (.env):
+
+   VITE_SUPABASE_URL=your_supabase_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+4. Run locally:
+   npm run dev
+   
+   ```
