@@ -1,0 +1,161 @@
+import { BookingColumnsProps } from "./ui/components/booking-colums";
+
+export const providerservices = [
+  {
+    title: "Web Development",
+    description:
+      "Build responsive and scalable websites tailored to your business needs.",
+    price: 1200,
+    duration: "2-4 weeks",
+    tag: "Popular",
+  },
+  {
+    title: "SEO Optimization",
+    description:
+      "Improve your search engine ranking and drive more traffic to your site.",
+    price: 500,
+    duration: "1-2 weeks",
+    tag: "Recommended",
+  },
+  {
+    title: "UI/UX Design",
+    description:
+      "Design intuitive user interfaces and experiences for your apps and websites.",
+    price: 800,
+    duration: "2-3 weeks",
+    tag: "New",
+  },
+];
+
+export const reservedbookings: BookingColumnsProps[] = [
+  {
+    id: "bkg-001",
+    title: "Haircut Appointment",
+    status: "success",
+    description: "Classic men’s haircut with fade.",
+    date: "2025-09-28",
+    time: "3:00 PM",
+  },
+  {
+    id: "bkg-002",
+    title: "Yoga Class",
+    status: "pending",
+    description: "Morning yoga with instructor Sarah.",
+    date: "2025-09-30",
+    time: "8:30 AM",
+  },
+  {
+    id: "bkg-003",
+    title: "Dental Checkup",
+    status: "processing",
+    description: "Routine dental exam and cleaning.",
+    date: "2025-10-02",
+    time: "10:00 AM",
+  },
+  {
+    id: "bkg-004",
+    title: "Massage Therapy",
+    status: "failed",
+    description: "Deep tissue massage session.",
+    date: "2025-10-05",
+    time: "2:00 PM",
+  },
+  {
+    id: "bkg-005",
+    title: "Car Service",
+    status: "success",
+    description: "Oil change and tire rotation.",
+    date: "2025-10-07",
+    time: "11:00 AM",
+  },
+  {
+    id: "bkg-006",
+    title: "Photography Session",
+    status: "pending",
+    description: "Outdoor family photoshoot.",
+    date: "2025-10-09",
+    time: "4:30 PM",
+  },
+  {
+    id: "bkg-007",
+    title: "Conference Room Booking",
+    status: "processing",
+    description: "Team strategy meeting setup.",
+    date: "2025-10-12",
+    time: "9:00 AM",
+  },
+  {
+    id: "bkg-008",
+    title: "Catering Service",
+    status: "success",
+    description: "Buffet setup for corporate lunch.",
+    date: "2025-10-14",
+    time: "1:00 PM",
+  },
+  {
+    id: "bkg-009",
+    title: "Pet Grooming",
+    status: "failed",
+    description: "Full grooming for Golden Retriever.",
+    date: "2025-10-16",
+    time: "10:30 AM",
+  },
+  {
+    id: "bkg-010",
+    title: "Language Class",
+    status: "pending",
+    description: "Beginner Spanish lessons.",
+    date: "2025-10-18",
+    time: "6:00 PM",
+  },
+  {
+    id: "bkg-011",
+    title: "Fitness Training",
+    status: "processing",
+    description: "Personal trainer 1-on-1 session.",
+    date: "2025-10-20",
+    time: "7:00 AM",
+  },
+  {
+    id: "bkg-012",
+    title: "Makeup Appointment",
+    status: "success",
+    description: "Bridal makeup trial session.",
+    date: "2025-10-22",
+    time: "5:00 PM",
+  },
+  {
+    id: "bkg-013",
+    title: "Tech Support",
+    status: "failed",
+    description: "Laptop diagnostics and repair.",
+    date: "2025-10-24",
+    time: "11:45 AM",
+  },
+  {
+    id: "bkg-014",
+    title: "Music Lesson",
+    status: "processing",
+    description: "Private piano lesson for beginners.",
+    date: "2025-10-26",
+    time: "3:30 PM",
+  },
+  {
+    id: "bkg-015",
+    title: "Spa Facial",
+    status: "success",
+    description: "Rejuvenating skin treatment.",
+    date: "2025-10-28",
+    time: "1:15 PM",
+  },
+];
+
+export const slotsData = [
+  { day: "Monday", slots: ["09:00 AM", "10:30 AM", "02:00 PM", "05:30 PM"] },
+  { day: "Tuesday", slots: ["08:00 AM", "11:00 AM", "01:30 PM", "04:00 PM"] },
+  { day: "Wednesday", slots: ["07:30 AM", "09:00 AM", "12:00 PM", "03:30 PM"] },
+  { day: "Thursday", slots: ["10:00 AM", "11:30 AM", "02:00 PM", "06:00 PM"] },
+  { day: "Friday", slots: ["09:00 AM", "12:00 PM", "01:30 PM", "05:00 PM"] },
+  { day: "Saturday", slots: ["08:30 AM", "10:00 AM", "01:00 PM", "03:00 PM"] },
+  { day: "Sunday", slots: ["09:30 AM", "11:00 AM", "02:30 PM", "04:30 PM"] },
+];
