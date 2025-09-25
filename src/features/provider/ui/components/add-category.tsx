@@ -1,11 +1,11 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "lucide-react";
-import { useState } from "react";
+import { PackagePlus } from "lucide-react";
 import { QuickActionModal } from "./quick-actions-modal";
-import { UpdateAvailabilityForm } from "./updata-availability-form";
+import { useState } from "react";
+import { AddCategoryForm } from "./add-category-form";
 
-export const UpdateAvailability = () => {
+export const ManageServices = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -16,17 +16,18 @@ export const UpdateAvailability = () => {
   return (
     <>
       <Button variant={"cta"} onClick={handleOpen}>
-        <Calendar className="shrink-0 size-6" />{" "}
-        <span>Update Availability</span>
+        <PackagePlus className="shrink-0 size-6" />{" "}
+        <span>Add New Category</span>
       </Button>
+
       <QuickActionModal
-        title="Update availability"
-        description="Update service avaiability"
+        title="Add Service"
+        description="Add new service to offer"
         onOpenChange={setOpen}
         open={open}
         className="!max-w-lg"
       >
-        <UpdateAvailabilityForm onClose={handlClose} />
+        <AddCategoryForm onClose={handlClose} />
       </QuickActionModal>
     </>
   );

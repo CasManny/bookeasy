@@ -159,3 +159,36 @@ export const slotsData = [
   { day: "Saturday", slots: ["08:30 AM", "10:00 AM", "01:00 PM", "03:00 PM"] },
   { day: "Sunday", slots: ["09:30 AM", "11:00 AM", "02:30 PM", "04:30 PM"] },
 ];
+
+export const topService = [
+  {
+    id: 1,
+    name: "60-Minute Deep Tissue Massage",
+    description: "Therapeutic massage targeting muscle tension and knots",
+    duration: 60,
+    price: 120,
+    category: "Massage Therapy",
+    bookings: 24,
+    status: "active",
+  },
+  {
+    id: 2,
+    name: "30-Minute Express Facial",
+    description: "Quick rejuvenating facial treatment",
+    duration: 30,
+    price: 75,
+    category: "Skincare",
+    bookings: 18,
+    status: "active",
+  },
+  {
+    id: 3,
+    name: "90-Minute Relaxation Package",
+    description: "Complete wellness experience with massage and aromatherapy",
+    duration: 90,
+    price: 180,
+    category: "Wellness",
+    bookings: 12,
+    status: "inactive",
+  },
+];

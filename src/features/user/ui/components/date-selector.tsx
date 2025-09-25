@@ -38,7 +38,10 @@ interface BookingFormProps {
   reschedule?: boolean;
 }
 
-export const DateSelector: React.FC<BookingFormProps> = ({ onClose, reschedule }) => {
+export const DateSelector: React.FC<BookingFormProps> = ({
+  onClose,
+  reschedule,
+}) => {
   const form = useForm<BookingFormValues>({
     resolver: zodResolver(bookingSchema),
     defaultValues: {
@@ -58,7 +61,7 @@ export const DateSelector: React.FC<BookingFormProps> = ({ onClose, reschedule }
   };
 
   return (
-    <div className="basis-2/3">
+    <div className="lg:basis-2/3">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
           {/* Date Picker */}
@@ -136,53 +139,52 @@ export const DateSelector: React.FC<BookingFormProps> = ({ onClose, reschedule }
 
           {!reschedule && (
             <>
-            <FormField
-              control={form.control}
-              name="fullName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Full Name <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <User className="absolute top-1/2 -translate-y-1/2 left-3" />
-                      <Input
-                        placeholder="John Doe"
-                        {...field}
-                        className="pl-13"
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-  
-            {/* Email */}
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>
-                    Email <span className="text-red-500">*</span>
-                  </FormLabel>
-                  <FormControl>
-                    <div className="relative">
-                      <Mail className="absolute top-1/2 -translate-y-1/2 left-3" />
-                      <Input
-                        placeholder="john@example.com"
-                        {...field}
-                        className="pl-12"
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            
+              <FormField
+                control={form.control}
+                name="fullName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Full Name <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <User className="absolute top-1/2 -translate-y-1/2 left-3" />
+                        <Input
+                          placeholder="John Doe"
+                          {...field}
+                          className="pl-13"
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Email */}
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>
+                      Email <span className="text-red-500">*</span>
+                    </FormLabel>
+                    <FormControl>
+                      <div className="relative">
+                        <Mail className="absolute top-1/2 -translate-y-1/2 left-3" />
+                        <Input
+                          placeholder="john@example.com"
+                          {...field}
+                          className="pl-12"
+                        />
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
             </>
           )}
           <div className="flex gap-5 mt-2">

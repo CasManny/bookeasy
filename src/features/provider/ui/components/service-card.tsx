@@ -6,7 +6,7 @@ interface Props {
   description: string;
   price: number;
   duration: string;
-  tag: string;
+  category: string;
 }
 
 export const ServiceCard: React.FC<Props> = ({
@@ -14,13 +14,19 @@ export const ServiceCard: React.FC<Props> = ({
   description,
   price,
   duration,
-  tag,
+  category,
 }) => {
   return (
     <div className="bg-white shadow-md rounded-2xl py-10 px-4 border border-gray-100 hover:shadow-lg transition">
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-xl font-semibold text-gray-900">{title}</h3>
-        <ManageCTA />
+        <ManageCTA
+          title={title}
+          description={description}
+          duration={duration}
+          category={category}
+          price={price}
+        />
       </div>
 
       {/* Description */}
@@ -33,7 +39,7 @@ export const ServiceCard: React.FC<Props> = ({
       </div>
 
       <p className="px-3 mt-4 w-fit py-1 text-sm font-medium text-white bg-brand-accent rounded-full">
-        {tag}
+        {category}
       </p>
     </div>
   );

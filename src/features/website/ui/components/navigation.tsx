@@ -1,5 +1,6 @@
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { FC } from "react";
 
 export const Navigation: FC = () => (
@@ -8,10 +9,12 @@ export const Navigation: FC = () => (
       <div className="flex items-center justify-between">
         <Logo />
         <div className="hidden md:flex items-center space-x-8">
-          <Button variant="outline" className="mr-2">
-            Login
+          <Button asChild variant="outline" className="mr-2">
+            <Link href="/login">Login</Link>
           </Button>
-          <Button className="bg-brand-blue">Get Started</Button>
+          <Button asChild variant={"default"} className="bg-brand-blue">
+            <Link href="/sign-up">Get Started</Link>
+          </Button>
         </div>
       </div>
     </div>

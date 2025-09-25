@@ -20,8 +20,8 @@ export const BookingForm = ({
   closeModal,
 }: Props) => {
   return (
-    <div className="flex gap-5">
-      <div className="basis-1/2">
+    <div className="flex gap-5 lg:flex-row flex-col">
+      <div className="lg:basis-1/2">
         <ServiceCard
           showButton={false}
           duration={time}

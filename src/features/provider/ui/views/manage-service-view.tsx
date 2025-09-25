@@ -12,7 +12,7 @@ export const ManageServiceView = () => {
           description={service.description}
           price={service.price}
           duration={service.duration}
-          tag={service.tag}
+          category={service.tag}
         />
       ))}
     </div>

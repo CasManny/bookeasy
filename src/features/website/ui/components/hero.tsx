@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export const Hero: FC = () => (
   <section className="pt-32 pb-20 px-6">
@@ -29,14 +30,18 @@ export const Hero: FC = () => (
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-          <Button
-            size="lg"
-            className="bg-brand-blue text-white px-8 py-6 text-lg"
-          >
-            Start Free Trial <ArrowRight className="ml-2 h-5 w-5" />
+          <Button asChild size="lg" className="bg-brand-blue text-white ">
+            <Link href={"/sign-up"}>
+              Start Free Trial <ArrowRight className="ml-2 h-5 w-5" />
+            </Link>
           </Button>
-          <Button size="lg" variant="outline" className="px-8 py-6 text-lg">
-            Watch Demo
+          <Button
+            asChild
+            size="lg"
+            variant="outline"
+            className="px-8 py-6 text-lg"
+          >
+            <Link href={"/login"}>Watch Demo</Link>
           </Button>
         </div>
 
