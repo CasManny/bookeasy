@@ -41,6 +41,9 @@ export const BookDetailsCard: React.FC<Props> = ({ data }) => {
         await queryClient.invalidateQueries(
           trpc.provider.getBookingById.queryOptions({ id })
         );
+        await queryClient.invalidateQueries(
+          trpc.provider.getStats.queryOptions()
+        );
       },
     })
   );
