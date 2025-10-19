@@ -26,7 +26,7 @@ export async function middleware(request: NextRequest) {
 
   // Redirect logged-in users away from login/signup
   if (isAuth && isLoggedIn) {
-    return NextResponse.redirect(new URL("/services", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
