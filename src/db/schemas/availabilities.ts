@@ -1,8 +1,8 @@
-import { boolean, pgEnum, pgTable, text, uuid } from "drizzle-orm/pg-core";
-import { createdAt, id } from "../schema-helpers";
-import { user } from "./user";
 import { relations } from "drizzle-orm";
+import { boolean, pgEnum, pgTable, text } from "drizzle-orm/pg-core";
+import { createdAt, id } from "../schema-helpers";
 import { slots } from "./slots";
+import { user } from "./user";
 
 export const dayOfWeek = pgEnum("day_of_week", ['mon', 'tue', 'wed', 'thurs', 'fri', 'sat', 'sun'])
 export const availabilities = pgTable('availabilities', {

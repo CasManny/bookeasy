@@ -11,7 +11,7 @@ import Loaders from "@/components/loader";
 import { ErrorState } from "@/components/error-state";
 
 export const BookingsView = () => {
-  const [filters, setFilters] = useBookingsFilters();
+  const [filters] = useBookingsFilters();
   const trpc = useTRPC();
 
   const { data } = useSuspenseQuery(

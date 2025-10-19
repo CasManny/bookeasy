@@ -27,7 +27,6 @@ export const BookDetailsCard: React.FC<Props> = ({ data }) => {
     price,
     serviceDescription,
     serviceName,
-    slotTime,
     status,
   } = data;
   const trpc = useTRPC();

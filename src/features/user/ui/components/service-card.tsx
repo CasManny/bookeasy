@@ -1,13 +1,10 @@
 // ServiceCard.tsx
 "use client";
-import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
-import { Clock, XIcon } from "lucide-react";
-import React, { useState } from "react";
-import { BookingForm } from "./booking-form";
 import { cn } from "@/lib/utils";
-import { ServicesType } from "../../types";
+import { Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { ServicesType } from "../../types";
 
 interface Props {
   data: ServicesType;

@@ -9,7 +9,7 @@ This app provides role-based access for **Users** (who can browse and book servi
 
 ### 🔑 Authentication & Roles
 
-- Secure login with **Supabase Auth** (email/password, OAuth, or magic link).
+- Secure login with **BetterAuth** (email/password).
 - Role-based access:
   - **Users** → Browse & book services.
   - **Providers** → Manage services, availability, and bookings.
@@ -34,7 +34,7 @@ This app provides role-based access for **Users** (who can browse and book servi
   - Define available slots, adjust or block times.
 - **Booking Oversight**
   - Dashboard with upcoming/past bookings.
-  - Handle cancellations or reschedules.
+  - Handle cancellations.
 
 ---
 
@@ -42,24 +42,21 @@ This app provides role-based access for **Users** (who can browse and book servi
 
 ### Frontend
 
-- **React** (with React Router)
+- **Nextjs** (React Framework)
 - **TailwindCSS** (responsive UI)
 - Key components:
   - Service List (infinite scroll)
   - Service Details Page
-  - Calendar/Date Picker
-  - Booking Summary Modal
   - User Dashboard
   - Provider Dashboard
 
 ### Backend
 
-- **Supabase** (Postgres + Realtime + Auth)
-- Database schema:
-  - `users` → roles: `user` or `provider`
-  - `services` → service details per provider
-  - `availability` → service availability slots
-  - `bookings` → user bookings with status tracking
+- **Supabase** (Postgres)
+- **BetterAuth** (Authentication)
+- **Inngest** (Background Jobs)
+- **tRPC** (Type-safe API layer for client–server communication)
+
 
 ---
 
@@ -68,7 +65,6 @@ This app provides role-based access for **Users** (who can browse and book servi
 ### Prerequisites
 
 - Node.js (>= 16)
-- Supabase project & keys
 
 ### Installation
 
@@ -84,8 +80,11 @@ This app provides role-based access for **Users** (who can browse and book servi
 
 3. Set up environment variables (.env):
 
-   VITE_SUPABASE_URL=your_supabase_url
-   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+DATABASE_URL=
+BETTER_AUTH_SECRET=
+BETTER_AUTH_URL=http://localhost:3000 
+
+
 
 4. Run locally:
    npm run dev

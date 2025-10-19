@@ -1,11 +1,10 @@
 import {
   availabilities,
   bookings,
-  bookingSelectSchema,
   categories,
   services,
   slots,
-  user,
+  user
 } from "@/db/schema";
 import { AvailabilityWithSlots } from "@/features/provider/types";
 import { db } from "@/index";
@@ -150,6 +149,7 @@ export const userRouter = createTRPCRouter({
           service,
         };
       } catch (error) {
+        console.log(error)
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Could not fetch availabilities and slots",

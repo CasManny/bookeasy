@@ -21,7 +21,7 @@ export const RecentBookings = ({ bookingStats }: Props) => {
         {hasBookings ? (
           <div className="flex flex-col space-y-2">
             {bookingStats.map((b, i) => (
-              <BookCard key={i} {...b} />
+              <BookCard key={i} data={b} />
             ))}
           </div>
         ) : (

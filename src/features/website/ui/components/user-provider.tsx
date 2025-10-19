@@ -95,7 +95,7 @@ export const UserProviderFeatures: FC = () => {
             Built for Everyone
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Whether you're looking for a service or offering one, BookHub has
+            Whether you&apos;re looking for a service or offering one, BookHub has
             everything you need to succeed
           </p>
         </div>

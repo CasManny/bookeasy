@@ -35,7 +35,6 @@ export const Navigation = async () => {
     );
   } else {
     const link = { href: "/services", name: "Services", Icon: HomeIcon };
-    const isActive = false;
     navLinks = (
       <Link
         href={link.href}

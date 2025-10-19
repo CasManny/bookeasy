@@ -68,7 +68,7 @@ export const DateSelector: React.FC<BookingFormProps> = ({
           <FormField
             control={form.control}
             name="date"
-            render={({ field }) => (
+            render={({  }) => (
               <FormItem className="">
                 <FormLabel>
                   <div className="flex items-center gap-1">

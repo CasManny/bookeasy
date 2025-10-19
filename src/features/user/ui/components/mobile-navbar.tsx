@@ -1,13 +1,12 @@
 "use client";
-import React, { useState } from "react";
-import { Logo } from "@/components/logo";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { LogOut, Menu, Home, Calendar } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { signOut } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
+import { Calendar, Home, LogOut, Menu } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { signOut } from "@/lib/auth-client";
+import { useState } from "react";
 
 const navLinks = [
   { name: "Services", icon: Home, href: "/services" },

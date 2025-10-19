@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { availabilities, dayOfWeek, user } from "@/db/schema";
 import { db } from "@/index";
 import { auth, ErrorCode } from "@/lib/auth";
@@ -31,7 +32,7 @@ export const authRouter = createTRPCRouter({
       const { email, fullName, password, role } = input;
 
       try {
-        const result = await db.transaction(async (tx) => {
+        await db.transaction(async (tx) => {
           const newUser = await auth.api.createUser({
             body: {
               email,

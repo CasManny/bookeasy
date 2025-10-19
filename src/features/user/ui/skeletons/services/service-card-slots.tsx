@@ -1,8 +1,6 @@
 "use client";
 
-import { Clock } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-import React from "react";
 
 export const ServiceCardWithSlotsSkeleton = () => {
   return (

@@ -1,6 +1,5 @@
 "use client";
 
-import { Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -9,15 +8,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import React, { useState, useMemo } from "react";
-import { cn, getFullDayName } from "@/lib/utils";
-import { ServiceDetailType } from "../../types";
 import { WeekDay } from "@/features/provider/types";
-import { useMutation } from "@tanstack/react-query";
+import { cn, getFullDayName } from "@/lib/utils";
 import { useTRPC } from "@/trpc/client";
+import { useMutation } from "@tanstack/react-query";
+import { Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { services } from "@/db/schema";
+import { ServiceDetailType } from "../../types";
 
 interface Props {
   data: ServiceDetailType;

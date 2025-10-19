@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   availabilities,
   bookings,
@@ -11,14 +12,14 @@ import {
 } from "@/db/schema";
 import { db } from "@/index";
 import { createTRPCRouter, providerProcedure } from "@/trpc/init";
-import { and, count, desc, eq, lt, or, sql } from "drizzle-orm";
 import { APIError } from "better-auth/api";
+import { and, count, desc, eq, lt, or } from "drizzle-orm";
 
-import z from "zod";
+import { inngest } from "@/inngest/client";
 import { ErrorCode } from "@/lib/auth";
 import { TRPCError } from "@trpc/server";
+import z from "zod";
 import { AvailabilityWithSlots } from "../types";
-import { inngest } from "@/inngest/client";
 
 const bookingStatusSchema = bookingSelectSchema.shape.status;
 
@@ -484,6 +485,7 @@ export const providerRouter = createTRPCRouter({
 
         return { success: true, message: "Slot deleted Successfully" };
       } catch (error) {
+        console.log(error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message: "Failed to Delete slot. Please try again.",

@@ -1,8 +1,8 @@
-import { pgTable, text, uuid } from "drizzle-orm/pg-core";
-import { createdAt, id } from "../schema-helpers";
-import { user } from "./user";
 import { relations } from "drizzle-orm";
+import { pgTable, text } from "drizzle-orm/pg-core";
+import { createdAt, id } from "../schema-helpers";
 import { services } from "./services";
+import { user } from "./user";
 
 export const categories = pgTable("categories", {
     id,
