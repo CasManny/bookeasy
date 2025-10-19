@@ -4,7 +4,7 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Eye, EyeOff, Lock, Mail } from "lucide-react";
+import { Eye, EyeOff, Loader2, Lock, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -17,9 +17,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { useMutation } from "@tanstack/react-query";
+import { useTRPC } from "@/trpc/client";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const formSchema = z.object({
-  email: z.string().email({ message: "Enter a valid email" }),
+  email: z.email({ message: "Enter a valid email" }),
   password: z
     .string()
     .min(6, { message: "Password must be at least 6 characters" }),
@@ -27,6 +31,27 @@ const formSchema = z.object({
 
 export function SignInForm() {
   const [showPassword, setShowPassword] = React.useState(false);
+  const trpc = useTRPC();
+  const router = useRouter();
+
+  const login = useMutation(
+    trpc.auth.loginToAccount.mutationOptions({
+      onSuccess: (data) => {
+        toast.success(data.message);
+        const { role } = data.role!;
+        if (role === "user") {
+          router.push("/services");
+        } else {
+          router.push("/dashboard");
+        }
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    })
+  );
+
+  const isPending = login.isPending;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,6 +63,7 @@ export function SignInForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("Form values:", values);
+    login.mutate(values);
   }
 
   return (
@@ -110,9 +136,17 @@ export function SignInForm() {
           {/* Submit */}
           <Button
             type="submit"
+            disabled={isPending}
             className="w-full bg-brand-blue hover:bg-brand-blue/80"
           >
-            Sign In
+            {isPending ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Signing In...
+              </>
+            ) : (
+              "Sign In"
+            )}
           </Button>
         </form>
       </Form>

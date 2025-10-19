@@ -1,17 +1,17 @@
 import React from "react";
 
 interface ServiceItemProps {
-  id: string | number;
+  id: string;
   name: string;
-  bookings: number;
+  bookingsCount: number;
   price: number;
-  duration: number;
+  duration: string;
 }
 
 export const TopServiceCard: React.FC<ServiceItemProps> = ({
   id,
   name,
-  bookings,
+  bookingsCount,
   price,
   duration,
 }) => {
@@ -19,11 +19,11 @@ export const TopServiceCard: React.FC<ServiceItemProps> = ({
     <div key={id} className="flex items-center justify-between p-2 border-b">
       <div>
         <div className="font-medium">{name}</div>
-        <div className="text-sm text-gray-500">{bookings} bookings</div>
+        <div className="text-sm text-gray-500">{bookingsCount} bookings</div>
       </div>
       <div className="text-right">
         <div className="font-medium">${price}</div>
-        <div className="text-sm text-gray-500">{duration} min</div>
+        <div className="text-sm text-gray-500">{duration}</div>
       </div>
     </div>
   );

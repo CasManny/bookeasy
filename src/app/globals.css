@@ -89,7 +89,6 @@
   --brand-light: #a3abbd;
   --brand-highlight: #f87a9d;
   --brand-accent: #bc446a;
-
 }
 
 .dark {
@@ -134,7 +133,12 @@
     @apply bg-background text-foreground;
   }
   .flex-center {
-    @apply flex items-center justify-center
+    @apply flex items-center justify-center;
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
 }
 
@@ -147,4 +151,3 @@
   -ms-overflow-style: none; /* IE 10+ */
   scrollbar-width: none; /* Firefox */
 }
-

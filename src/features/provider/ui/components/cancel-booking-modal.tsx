@@ -10,7 +10,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useTRPC } from "@/trpc/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface Props {
   bookingId: string;
@@ -20,6 +23,26 @@ export function CancelBookingModal({ bookingId }: Props) {
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState("");
   const [error, setError] = useState("");
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const cancelBooking = useMutation(
+    trpc.provider.cancelBooking.mutationOptions({
+      onSuccess: async (data) => {
+        toast.success(data.message);
+        await queryClient.invalidateQueries(
+          trpc.provider.getBookingById.queryOptions({ id: bookingId })
+        );
+        await queryClient.invalidateQueries(
+          trpc.provider.getAllbookings.queryOptions({})
+        );
+        handleOpen(false);
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    })
+  );
 
   const handleOpen = (value: boolean) => {
     setOpen(value);
@@ -29,13 +52,14 @@ export function CancelBookingModal({ bookingId }: Props) {
     }
   };
 
+  const isPending = cancelBooking.isPending;
+
   const handleConfirm = () => {
     if (reason.trim() === "") {
       setError("Please provide a reason for canceling this booking.");
       return;
     }
-    console.log("Booking cancelled:", bookingId, "Reason:", reason);
-    handleOpen(false);
+    cancelBooking.mutate({ bookingId, reason });
   };
 
   return (
@@ -71,14 +95,15 @@ export function CancelBookingModal({ bookingId }: Props) {
 
         <div className="pt-6 w-full flex flex-col-reverse gap-y-2 lg:flex-row gap-x-2 items-center justify-center lg:justify-end">
           <Button
+            disabled={isPending}
             onClick={() => handleOpen(false)}
             variant="outline"
             className="lg:w-auto w-full"
           >
             Cancel
           </Button>
-          <Button onClick={handleConfirm} className="w-full lg:w-auto">
-            Confirm
+          <Button disabled={isPending} onClick={handleConfirm} className="w-full lg:w-auto">
+            {isPending ? "cancelling..." : "Confirm"}
           </Button>
         </div>
       </AlertDialogContent>

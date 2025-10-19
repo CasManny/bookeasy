@@ -1,5 +1,11 @@
-import { LandingPageView } from "@/features/website/ui/view/landing-page-view";
+import { Hero } from "@/features/website/ui/components/hero";
+import { Navigation } from "@/features/website/ui/components/navigation";
 
 export default function Home() {
-  return <LandingPageView />
+  return (
+    <>
+      <Navigation />
+      <Hero />
+    </>
+  );
 }

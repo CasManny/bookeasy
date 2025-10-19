@@ -4,8 +4,13 @@ import { Calendar } from "lucide-react";
 import { useState } from "react";
 import { QuickActionModal } from "./quick-actions-modal";
 import { UpdateAvailabilityForm } from "./updata-availability-form";
+import { cn } from "@/lib/utils";
 
-export const UpdateAvailability = () => {
+interface Props {
+  className?: string;
+}
+
+export const UpdateAvailability = ({ className }: Props) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -15,7 +20,7 @@ export const UpdateAvailability = () => {
   };
   return (
     <>
-      <Button variant={"cta"} onClick={handleOpen}>
+      <Button variant={"cta"} onClick={handleOpen} className={cn(className)}>
         <Calendar className="shrink-0 size-6" />{" "}
         <span>Update Availability</span>
       </Button>

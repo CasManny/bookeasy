@@ -25,29 +25,3 @@ export const services = [
     duration: "45 mins",
   },
 ];
-
-export const bookings = [
-  {
-    title: "Haircut Appointment",
-    status: "Confirmed",
-    bookingId: "string",
-    time: "September 25th, 2025 - 10:00 AM",
-    price: 30,
-  },
-  {
-    title: "Massage Therapy",
-    status: "Pending",
-    bookingId: "stringdd",
-
-    time: "September 28th, 2025 - 2:30 PM",
-    price: 60,
-  },
-  {
-    title: "Nail Treatment",
-    status: "Cancelled",
-    bookingId: "stringeee",
-
-    time: "September 20th, 2025 - 1:00 PM",
-    price: 25,
-  },
-];

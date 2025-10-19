@@ -1,34 +1,50 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useConfirm } from "@/hooks/use-confirm";
 import { Calendar, Clock, DollarSign, Info, Tag, User } from "lucide-react";
 import React from "react";
 import { CancelBookingModal } from "./cancel-booking-modal";
+import { BookingDetailsType } from "../../types";
+import { useTRPC } from "@/trpc/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 interface Props {
-  title: string;
-  duration: string;
-  tag: string;
-  description: string;
-  price: number;
-  bookerName: string;
-  date: string;
-  status: string;
+  data: BookingDetailsType;
 }
 
-export const BookDetailsCard: React.FC<Props> = ({
-  title,
-  duration,
-  tag,
-  description,
-  price,
-  bookerName,
-  date,
-  status,
-}) => {
+export const BookDetailsCard: React.FC<Props> = ({ data }) => {
+  const {
+    category,
+    createdAt,
+    duration,
+    id,
+    bookedBy,
+    price,
+    serviceDescription,
+    serviceName,
+    slotTime,
+    status,
+  } = data;
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const acceptBooking = useMutation(
+    trpc.provider.acceptBooking.mutationOptions({
+      onSuccess: async (data) => {
+        toast.success(data.message);
+        await queryClient.invalidateQueries(
+          trpc.provider.getAllbookings.queryOptions({})
+        );
+        await queryClient.invalidateQueries(
+          trpc.provider.getBookingById.queryOptions({ id })
+        );
+      },
+    })
+  );
   const [AcceptBookingModal, confirmAccept] = useConfirm({
     title: "Accept Booking",
     description:
@@ -38,7 +54,7 @@ export const BookDetailsCard: React.FC<Props> = ({
   const handleAcceptBooking = async () => {
     const success = await confirmAccept();
     if (!success) return;
-    // continue process
+    acceptBooking.mutate({ bookingId: id });
   };
   return (
     <>
@@ -47,17 +63,19 @@ export const BookDetailsCard: React.FC<Props> = ({
         {/* Header */}
         <CardHeader className="flex justify-between items-start border-b pb-4">
           <div>
-            <CardTitle className="text-2xl font-semibold">{title}</CardTitle>
+            <CardTitle className="text-2xl font-semibold">
+              {serviceName}
+            </CardTitle>
             <p className="text-gray-500 text-sm mt-1 flex items-center gap-2">
               <Info className="w-4 h-4 text-gray-400" />
-              {description}
+              {serviceDescription}
             </p>
           </div>
           <Badge
             className={`${
               status === "pending"
                 ? "bg-yellow-500"
-                : status === "accepted"
+                : status === "confirmed"
                 ? "bg-green-600"
                 : "bg-red-600"
             } text-white px-3 py-1 text-sm rounded-full`}
@@ -76,7 +94,7 @@ export const BookDetailsCard: React.FC<Props> = ({
                 <p className="text-xs uppercase tracking-wide text-gray-400">
                   Booked by
                 </p>
-                <p className="text-gray-800 font-medium">{bookerName}</p>
+                <p className="text-gray-800 font-medium">{bookedBy}</p>
               </div>
             </div>
 
@@ -87,7 +105,9 @@ export const BookDetailsCard: React.FC<Props> = ({
                 <p className="text-xs uppercase tracking-wide text-gray-400">
                   Date & Time
                 </p>
-                <p className="text-gray-800 font-medium">{date}</p>
+                <p className="text-gray-800 font-medium">
+                  {format(createdAt, "PPP p")}
+                </p>
               </div>
             </div>
 
@@ -109,7 +129,7 @@ export const BookDetailsCard: React.FC<Props> = ({
                 <p className="text-xs uppercase tracking-wide text-gray-400">
                   Category
                 </p>
-                <p className="text-gray-800 font-medium">{tag}</p>
+                <p className="text-gray-800 font-medium">{category}</p>
               </div>
             </div>
 
@@ -134,7 +154,7 @@ export const BookDetailsCard: React.FC<Props> = ({
               >
                 Accept Booking
               </Button>
-              <CancelBookingModal bookingId="" />
+              <CancelBookingModal bookingId={id} />
             </div>
           )}
         </CardContent>

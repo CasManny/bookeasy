@@ -1,6 +1,7 @@
 "use client";
 
 import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
 import React from "react";
 
@@ -10,6 +11,7 @@ interface Props {
   isRevenue: boolean;
   value: number;
   color: string;
+  className?: string;
 }
 
 export const StatsCard: React.FC<Props> = ({
@@ -18,13 +20,14 @@ export const StatsCard: React.FC<Props> = ({
   isRevenue,
   value,
   color,
+  className
 }) => {
   const formattedValue = isRevenue
     ? `$${value.toLocaleString()}`
     : value.toLocaleString();
 
   return (
-    <Card className="p-8 shadow-sm rounded-2xl">
+    <Card className={cn("p-8 shadow-sm rounded-2xl", className)}>
       <div className="flex items-center justify-between space-y-0">
         <div className="space-y-0.5">
           <h1 className="text-lg font-medium">{title}</h1>

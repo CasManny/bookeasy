@@ -15,24 +15,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { CategorySelect } from "./category-selector";
+import { useTRPC } from "@/trpc/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { DEFAULT_LIMIT } from "@/constants";
+import { ServiceCardType } from "../../types";
 
 interface Props {
   onClose: () => void;
-  initialValue?: {
-    title: string;
-    description: string;
-    price: number;
-    duration: string;
-    category: string;
-  };
+  initialValue?: ServiceCardType;
 }
-
-const dummyCategories = [
-  { id: "spa", label: "Spa" },
-  { id: "massage", label: "Massage" },
-  { id: "therapy", label: "Therapy" },
-  { id: "fitness", label: "Fitness" },
-];
 
 // Validation schema
 const addServiceSchema = z.object({
@@ -46,6 +38,43 @@ const addServiceSchema = z.object({
 type AddServiceFormValues = z.infer<typeof addServiceSchema>;
 
 export const AddServiceForm = ({ onClose, initialValue }: Props) => {
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+
+  const createService = useMutation(
+    trpc.provider.createService.mutationOptions({
+      onSuccess: async (data) => {
+        toast.success(data.message);
+        await queryClient.invalidateQueries(
+          trpc.provider.getAllServices.infiniteQueryOptions({
+            limit: DEFAULT_LIMIT,
+          })
+        );
+        await queryClient.invalidateQueries(trpc.provider.getStats.queryOptions())
+        onClose();
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    })
+  );
+  const updateService = useMutation(
+    trpc.provider.editService.mutationOptions({
+      onSuccess: async (data) => {
+        toast.success(data.message);
+        await queryClient.invalidateQueries(
+          trpc.provider.getAllServices.infiniteQueryOptions({
+            limit: DEFAULT_LIMIT,
+          })
+        );
+        onClose();
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    })
+  );
+
   const form = useForm<AddServiceFormValues>({
     resolver: zodResolver(addServiceSchema),
     defaultValues: {
@@ -53,13 +82,34 @@ export const AddServiceForm = ({ onClose, initialValue }: Props) => {
       description: initialValue?.description || "",
       price: initialValue?.price || 0,
       duration: initialValue?.duration || "",
-      category: initialValue?.category || "",
+      category: initialValue?.category?.value || "",
     },
   });
 
+  const isPending = createService.isPending || updateService.isPending
+  const isFormInvalid = !form.formState.isValid;
+  const isDisabled = isPending || isFormInvalid;
+
   const onSubmit = (values: AddServiceFormValues) => {
-    console.log("Service data:", values);
-    onClose(); // close modal after submit
+    if (initialValue) {
+      updateService.mutate({
+        id: initialValue.id,
+        categoryId: values.category,
+        description: values.description,
+        duration: values.duration,
+        price: values.price,
+        title: values.title,
+      });
+    } else {
+      createService.mutate({
+        categoryId: values.category,
+        description: values.description,
+        duration: values.duration,
+        price: values.price,
+        title: values.title,
+        userId: "",
+      });
+    }
   };
 
   return (
@@ -119,7 +169,6 @@ export const AddServiceForm = ({ onClose, initialValue }: Props) => {
             control={form.control}
             name="category"
             label="Select a Category"
-            categories={dummyCategories}
           />
 
           <FormField
@@ -142,11 +191,22 @@ export const AddServiceForm = ({ onClose, initialValue }: Props) => {
         </div>
 
         <div className="flex justify-end space-x-2">
-          <Button type="button" variant="secondary" onClick={onClose}>
+          <Button
+            disabled={isPending}
+            type="button"
+            variant="secondary"
+            onClick={onClose}
+          >
             Close
           </Button>
-          <Button type="submit" className="bg-brand-blue">
-            Add Service
+          <Button disabled={isDisabled} type="submit" className="bg-brand-blue">
+            {isPending
+              ? initialValue
+                ? "Updating..."
+                : "Adding..."
+              : initialValue
+              ? "Update Service"
+              : "Add Service"}
           </Button>
         </div>
       </form>

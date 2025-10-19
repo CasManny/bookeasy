@@ -14,26 +14,49 @@ import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTRPC } from "@/trpc/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 interface Props {
   onClose: () => void;
 }
 
 const categorySchema = z.object({
-  name: z.string().min(1, "Category name is required"),
+  name: z.string().min(3, "Category name is required and at least 3 characters"),
 });
 
 type CategoryFormValues = z.infer<typeof categorySchema>;
 
 export const AddCategoryForm = ({ onClose }: Props) => {
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const createCategegory = useMutation(
+    trpc.provider.createCategory.mutationOptions({
+      onSuccess: async (data) => {
+        toast.success(data.message);
+        await queryClient.invalidateQueries(
+          trpc.provider.getAllCategories.queryOptions()
+        );
+        onClose();
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    })
+  );
+
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(categorySchema),
     defaultValues: { name: "" },
   });
 
+  const nameValue = form.watch("name");
+  const isPending = createCategegory.isPending;
+  const isDisabled = isPending || nameValue.trim().length === 0;
+
   const onSubmit = (values: CategoryFormValues) => {
-    console.log("New category:", values);
-    onClose(); // close modal after submit
+    createCategegory.mutate(values);
   };
 
   return (
@@ -54,10 +77,17 @@ export const AddCategoryForm = ({ onClose }: Props) => {
         />
 
         <div className="flex justify-end space-x-2">
-          <Button type="button" variant="secondary" onClick={onClose}>
+          <Button
+            type="button"
+            disabled={isPending}
+            variant="secondary"
+            onClick={onClose}
+          >
             Cancel
           </Button>
-          <Button type="submit" className="bg-brand-blue">Add Category</Button>
+          <Button disabled={isDisabled} type="submit" className="bg-brand-blue">
+            Add Category
+          </Button>
         </div>
       </form>
     </Form>

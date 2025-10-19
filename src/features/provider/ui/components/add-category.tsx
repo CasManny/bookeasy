@@ -5,7 +5,7 @@ import { QuickActionModal } from "./quick-actions-modal";
 import { useState } from "react";
 import { AddCategoryForm } from "./add-category-form";
 
-export const ManageServices = () => {
+export const AddCategory = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => {
     setOpen(true);

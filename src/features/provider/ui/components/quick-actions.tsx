@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AddNewService } from "./add-new-service";
-import { ManageServices } from "./add-category";
+import { AddCategory } from "./add-category";
 import { UpdateAvailability } from "./update-availability";
 
 export const QuickActions = () => {
@@ -13,7 +13,7 @@ export const QuickActions = () => {
         <div className="space-y-3">
           <AddNewService className="bg-transparent hover:bg-brand-accent/10" />
           <UpdateAvailability />
-          <ManageServices />
+          <AddCategory />
         </div>
       </CardContent>
     </Card>

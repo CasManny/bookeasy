@@ -1,74 +1,97 @@
 "use client";
 
-import React, { useState } from "react";
-import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { getFullDayName } from "@/lib/utils";
+import { useTRPC } from "@/trpc/client";
+import {
+  useMutation,
+  useQueryClient,
+  useSuspenseQuery,
+} from "@tanstack/react-query";
+import { useState } from "react";
+import { toast } from "sonner";
+import { WeekDay } from "../../types";
 
 interface Props {
   onClose: () => void;
 }
 
-interface Availability {
-  monday: boolean;
-  tuesday: boolean;
-  wednesday: boolean;
-  thursday: boolean;
-  friday: boolean;
-  saturday: boolean;
-  sunday: boolean;
+interface AvailabilityResponse {
+  day: "mon" | "tue" | "wed" | "thurs" | "fri" | "sat" | "sun";
+  isAvailable: boolean;
 }
 
 export const UpdateAvailabilityForm = ({ onClose }: Props) => {
-  // Dummy data for initial availability
-  const dummyData: Availability = {
-    monday: true,
-    tuesday: false,
-    wednesday: true,
-    thursday: false,
-    friday: true,
-    saturday: false,
-    sunday: false,
+  const trpc = useTRPC();
+  const queryClient = useQueryClient();
+  const { data } = useSuspenseQuery(
+    trpc.provider.getAvailabilities.queryOptions()
+  );
+
+  const updateAvailability = useMutation(
+    trpc.provider.updateAvailability.mutationOptions({
+      onSuccess: async (data) => {
+        toast.success(data.message);
+        await queryClient.invalidateQueries(
+          trpc.provider.getAvailabilities.queryOptions()
+        );
+        await queryClient.invalidateQueries(
+          trpc.provider.getAvailabilitiesSlots.queryOptions()
+        );
+        onClose();
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    })
+  );
+
+  const [availability, setAvailability] = useState<AvailabilityResponse[]>(
+    data ?? []
+  );
+
+  const toggleDay = (day: AvailabilityResponse["day"]) => {
+    setAvailability((prev) =>
+      prev.map((d) =>
+        d.day === day ? { ...d, isAvailable: !d.isAvailable } : d
+      )
+    );
   };
 
-  const [availability, setAvailability] = useState<Availability>(dummyData);
-
-  const toggleDay = (day: keyof Availability) => {
-    setAvailability((prev) => ({
-      ...prev,
-      [day]: !prev[day],
-    }));
-  };
-
+  const isPending = updateAvailability.isPending;
   const handleSave = () => {
-    console.log("Saved availability:", availability);
-    onClose(); // Close modal after saving
-    // Here you would call API to save to DB
+    updateAvailability.mutate(availability);
   };
 
   return (
     <div className="space-y-4">
       <h3 className="text-xl font-bold">Set Weekly Availability</h3>
       <div className="grid grid-cols-1 gap-3">
-        {Object.entries(availability).map(([day, isAvailable]) => (
+        {availability.map(({ day, isAvailable }) => (
           <div
             key={day}
-            className="flex items-center justify-between p-2 border rounded-md"
+            className="flex items-center justify-between p-3 border rounded-md"
           >
-            <span className="capitalize text-lg">{day}</span>
+            <span className="text-lg">{getFullDayName(day as WeekDay)}</span>
             <Switch
               checked={isAvailable}
-              onCheckedChange={() => toggleDay(day as keyof Availability)}
+              onCheckedChange={() => toggleDay(day)}
             />
           </div>
         ))}
       </div>
 
       <div className="flex justify-end space-x-2 mt-4">
-        <Button variant="secondary" onClick={onClose}>
+        <Button disabled={isPending} variant="secondary" onClick={onClose}>
           Cancel
         </Button>
-        <Button className="bg-brand-blue" onClick={handleSave}>
-          Save
+        <Button
+          disabled={isPending}
+          className="bg-brand-blue"
+          onClick={handleSave}
+        >
+          {isPending ? "Updating..." : "Save"}
         </Button>
       </div>
     </div>

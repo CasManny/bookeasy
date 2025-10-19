@@ -1,14 +1,15 @@
 "use client";
 
+import { formatBookingDate } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 
 export type BookingColumnsProps = {
   id: string;
-  title: string;
-  status: "pending" | "processing" | "success" | "failed";
+  serviceName: string;
+  status: "pending" | "confirmed" | "cancelled" | null;
   description: string;
-  date: string;
-  time: string;
+  createdAt: Date;
+  slotTime: string | null;
 };
 
 export const Bookingcolumns: ColumnDef<BookingColumnsProps>[] = [
@@ -17,19 +18,31 @@ export const Bookingcolumns: ColumnDef<BookingColumnsProps>[] = [
     header: "Status",
   },
   {
-    accessorKey: "title",
+    accessorKey: "serviceName",
     header: "Title",
   },
   {
     accessorKey: "description",
     header: "Description",
+    cell: ({ row }) => {
+      const desc = row.original.description;
+      return (
+        <div className="max-w-[200px] truncate text-ellipsis" title={desc}>
+          {desc}
+        </div>
+      );
+    },
   },
   {
-    accessorKey: "date",
+    accessorKey: "createdAt",
     header: "Date",
+    cell: ({ row }) => {
+      const d = row.original.createdAt;
+      return formatBookingDate(d);
+    },
   },
   {
-    accessorKey: "time",
+    accessorKey: "slotTime",
     header: "Time",
   },
 ];

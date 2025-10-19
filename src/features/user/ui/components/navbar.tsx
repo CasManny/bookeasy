@@ -2,10 +2,12 @@
 import { Logo } from "@/components/logo";
 import React from "react";
 import { LogOut, Calendar, Home } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { signOut } from "@/lib/auth-client";
+import { MobileNavbar } from "./mobile-navbar";
 
 const navLinks = [
   {
@@ -21,6 +23,11 @@ const navLinks = [
 ];
 
 export const Navbar = () => {
+  const router = useRouter();
+  const handleLogout = async () => {
+    await signOut();
+    router.replace("/");
+  };
   const pathname = usePathname();
   return (
     <nav className="p-5 w-full sticky top-0 bg-white z-50 flex items-center justify-between shadow-sm">
@@ -44,11 +51,14 @@ export const Navbar = () => {
             </Link>
           );
         })}
-        <Button variant={"ghost"}>
+        <Button variant={"ghost"} onClick={handleLogout}>
           <LogOut className="w-5 h-5" />
           <span>Logout</span>
         </Button>
       </ul>
+      <div className="md:hidden">
+        <MobileNavbar />
+      </div>
     </nav>
   );
 };

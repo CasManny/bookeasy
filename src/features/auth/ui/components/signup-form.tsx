@@ -4,7 +4,7 @@ import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { Eye, EyeOff, Mail, User } from "lucide-react";
+import { Eye, EyeOff, Loader2, Mail, User } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -18,13 +18,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import Link from "next/link";
+import { useTRPC } from "@/trpc/client";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 // ✅ Validation schema
 const formSchema = z
   .object({
-    fullname: z.string().min(2, { message: "Full name is required" }),
+    fullName: z.string().min(2, { message: "Full name is required" }),
     email: z.email({ message: "Enter a valid email" }),
-    role: z.enum(["customer", "provider"], {
+    role: z.enum(["user", "provider"], {
       error: "Select the type of service",
     }),
     password: z
@@ -37,14 +41,29 @@ const formSchema = z
     path: ["confirmPassword"],
   });
 
+
+
 export function SignUpForm() {
   const [showPassword, setShowPassword] = React.useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = React.useState(false);
+  const trpc =useTRPC()
+  const router = useRouter()
 
+  const createAccount = useMutation(trpc.auth.createAccount.mutationOptions({
+    onSuccess: (data) => {
+      toast.success(data.message)
+      router.replace("/login")
+    },
+    onError: (error) => {
+      toast.error(error.message)
+    }
+  }))
+
+  const isPending = createAccount.isPending
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      fullname: "",
+      fullName: "",
       email: "",
       role: undefined,
       password: "",
@@ -54,10 +73,12 @@ export function SignUpForm() {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("SignUp Data:", values);
+    createAccount.mutate(values)
+
   }
 
   return (
-    <div className="max-w-xl mx-auto px-6 py-8 rounded-2xl w-full shadow-md bg-white">
+    <div className="max-w-xl mx-auto px-6 py-8 my-10 rounded-2xl w-full shadow-md bg-white">
       <div className="mb-8 space-y-1">
         <h2 className="text-2xl font-extrabold text-brand-blue tracking-wider text-center">
           Create your account
@@ -71,7 +92,7 @@ export function SignUpForm() {
           {/* Full Name */}
           <FormField
             control={form.control}
-            name="fullname"
+            name="fullName"
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Full Name</FormLabel>
@@ -127,11 +148,8 @@ export function SignUpForm() {
                     className="flex flex-col space-y-2"
                   >
                     <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="customer" id="customer" />
-                      <label
-                        htmlFor="customer"
-                        className="text-lg font-semibold"
-                      >
+                      <RadioGroupItem value="user" id="user" />
+                      <label htmlFor="user" className="text-lg font-semibold">
                         Book a Services (customer)
                       </label>
                     </div>
@@ -216,9 +234,17 @@ export function SignUpForm() {
           {/* Submit */}
           <Button
             type="submit"
+            disabled={isPending}
             className="w-full bg-brand-blue hover:bg-brand-blue/80"
           >
-            Sign Up
+            {isPending ? (
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Signing up...
+              </>
+            ) : (
+              "Sign up"
+            )}
           </Button>
         </form>
       </Form>

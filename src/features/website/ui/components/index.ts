@@ -1,5 +1,2 @@
 export { Features} from './features'
-export { Hero} from './hero'
-export { Navigation} from './navigation'
-export { useGSAP} from './useGSAP'
 export {UserProviderFeatures} from './user-provider'

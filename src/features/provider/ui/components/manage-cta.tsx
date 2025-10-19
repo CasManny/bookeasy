@@ -4,24 +4,39 @@ import { Edit, Trash } from "lucide-react";
 import React, { useState } from "react";
 import { QuickActionModal } from "./quick-actions-modal";
 import { AddServiceForm } from "./add-service-form";
+import { useTRPC } from "@/trpc/client";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { DEFAULT_LIMIT } from "@/constants";
+import { ServiceCardType } from "../../types";
 
 interface Props {
-  title: string;
-  description: string;
-  price: number;
-  category: string;
-  duration: string;
+  data: ServiceCardType
+  id: string;
 }
 
 export const ManageCTA = ({
-  title,
-  description,
-  price,
-  category,
-  duration,
+  id,
+  data
 }: Props) => {
-  const initialValues = { title, description, price, category, duration };
   const [open, setOpen] = useState(false);
+  const queryClient = useQueryClient();
+  const trpc = useTRPC();
+  const deleteService = useMutation(
+    trpc.provider.deleteService.mutationOptions({
+      onSuccess: async (data) => {
+        toast.success(data.message);
+        await queryClient.invalidateQueries(
+          trpc.provider.getAllServices.infiniteQueryOptions({
+            limit: DEFAULT_LIMIT,
+          })
+        );
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    })
+  );
   const [DeleteServiceModal, confirmDelete] = useConfirm({
     title: "Delete Service",
     description:
@@ -33,6 +48,7 @@ export const ManageCTA = ({
     if (!success) {
       return;
     }
+    deleteService.mutate({ id });
   };
 
   const handleOpen = () => {
@@ -59,7 +75,7 @@ export const ManageCTA = ({
         onOpenChange={setOpen}
         open={open}
       >
-        <AddServiceForm initialValue={initialValues} onClose={handlClose} />
+        <AddServiceForm initialValue={data} onClose={handlClose} />
       </QuickActionModal>
     </>
   );

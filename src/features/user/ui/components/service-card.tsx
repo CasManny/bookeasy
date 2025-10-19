@@ -6,29 +6,18 @@ import { Clock, XIcon } from "lucide-react";
 import React, { useState } from "react";
 import { BookingForm } from "./booking-form";
 import { cn } from "@/lib/utils";
+import { ServicesType } from "../../types";
+import { useRouter } from "next/navigation";
 
 interface Props {
-  tag: string;
-  price: number;
-  service: string;
-  description: string;
+  data: ServicesType;
   showButton?: boolean;
-  duration: string;
 }
 
-export const ServiceCard = ({
-  tag,
-  price,
-  service,
-  description,
-  duration,
-  showButton = true,
-}: Props) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+export const ServiceCard = ({ data, showButton = true }: Props) => {
+  const { category, description, duration, id, price, title, provider } = data;
+  const router = useRouter();
 
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
   return (
     <div
       className={cn(
@@ -39,12 +28,19 @@ export const ServiceCard = ({
     >
       <div className="flex justify-between items-center">
         <span className="text-sm font-semibold text-white bg-brand-accent px-3 py-1 rounded-full">
-          {tag}
+          {category}
         </span>
         <span className="text-brand-blue font-bold">${price}</span>
       </div>
-      <h3 className="mt-4 text-xl font-bold text-brand-black">{service}</h3>
+      <h3 className="mt-4 text-xl font-bold text-brand-black">{title}</h3>
       <p className="mt-2 text-brand-black text-sm sm:text-lg">{description}</p>
+
+      {!showButton && (
+        <div className="flex flex-col space-x-2 mt-5">
+          <p className="text-sm font-bold">Service Provider</p>
+          <p className="font-semibold text-sm">{provider}</p>
+        </div>
+      )}
 
       <div className="mt-4 flex gap-1">
         <Clock />
@@ -53,36 +49,29 @@ export const ServiceCard = ({
 
       {showButton && (
         <Button
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => router.push(`/services/${id}`)}
           className="mt-4 w-full bg-brand-blue text-white font-semibold py-2 rounded-xl hover:bg-brand-blue/80 transition-colors"
         >
           Book Now
         </Button>
       )}
 
-      <ResponsiveDialog
+      {/* <ResponsiveDialog
         open={isModalOpen}
         onOpenChange={setIsModalOpen}
         requireConfirmation
-        title={`Book: ${service}`}
-        description={`Select a date and time for ${service}`}
+        title={`Book: ${title}`}
+        description={`Select a date and time for ${title}`}
       >
         <div className="">
           <h1 className="text-brand-blue text-xl sm:text-3xl font-bold">
-            Book {service}
+            Book {title}
           </h1>
           <p className="text-sm sm:text-lg">
             Complete your booking details below
           </p>
         </div>
-        <BookingForm
-          service={service}
-          tag={tag}
-          price={price}
-          description={description}
-          time={duration}
-          closeModal={closeModal}
-        />
+        <BookingForm data={data} closeModal={closeModal} />
         <Button
           variant={"outline"}
           onClick={closeModal}
@@ -91,7 +80,7 @@ export const ServiceCard = ({
         >
           <XIcon />
         </Button>
-      </ResponsiveDialog>
+      </ResponsiveDialog> */}
     </div>
   );
 };

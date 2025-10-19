@@ -64,7 +64,7 @@ export function BookingDataTable<TData extends { id: string }, TValue>({
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                   className="cursor-pointer hover:bg-gray-100"
-                  onClick={() => router.push(rowLink)} // ✅ whole row clickable
+                  onClick={() => router.push(rowLink)} 
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>
@@ -80,7 +80,7 @@ export function BookingDataTable<TData extends { id: string }, TValue>({
           ) : (
             <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
+                No Bookings Yet
               </TableCell>
             </TableRow>
           )}
